@@ -137,6 +137,8 @@ Oberon::Oberon() {
 	ctl.exceptions(~std::ios::goodbit);
 	ctl.open(std::filesystem::path(sysfs).append("pp_od_clk_voltage"));
 
+	// Ensure first call to setOpp() always applies settings
+	opp = -1;        
 	// Put GPU in known state
 	setOpp(0);
 
