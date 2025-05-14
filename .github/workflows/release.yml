@@ -3,7 +3,7 @@ name: Build and Release
 on:
   push:
     tags:
-      - 'v*.*.*'  # Triggers when pushing tags like v1.0.0
+      - 'v*.*.*'
 
 jobs:
   build:
@@ -13,8 +13,10 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Install build tools
-      run: sudo apt-get update && sudo apt-get install -y cmake build-essential zip
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y cmake build-essential pkg-config libdrm-dev
 
     - name: Configure with CMake
       run: cmake .
@@ -22,15 +24,10 @@ jobs:
     - name: Build with Make
       run: make
 
-    - name: Package binary as ZIP
-      run: |
-        mkdir release
-        cp oberon-governor release/
-        cd release
-        zip oberon-governor.zip oberon-governor
-        mv oberon-governor.zip ../
+    - name: Make binary executable
+      run: chmod +x oberon-governor
 
-    - name: Create GitHub Release
+    - name: Upload binary to GitHub Release
       uses: softprops/action-gh-release@v1
       with:
         name: oberon-governor ${{ github.ref_name }}
@@ -38,11 +35,9 @@ jobs:
         body: |
           **oberon-governor** is a CMake-based CPU frequency scaling governor.
 
-          ### Highlights
-          - Automatic release from CI
-          - Built using GitHub Actions
-          - Includes precompiled binary for Linux
+          This release includes the compiled `oberon-governor` binary for Linux systems.
 
-        files: oberon-governor.zip
+        files: oberon-governor
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
