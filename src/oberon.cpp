@@ -130,12 +130,18 @@ Oberon::Oberon() {
 	close(fd);
 
 	// Open metrics sysfs node
-	metrics.exceptions(~std::ios::goodbit);
-	metrics.open(std::filesystem::path(sysfs).append("gpu_metrics"), std::ios::binary);
+    auto metrics_path = std::filesystem::path(sysfs) / "gpu_metrics";
+    metrics.open(metrics_path, std::ios::binary);
+    if (!metrics.is_open()) {
+        std::cerr << "Warning: cannot open " << metrics_path << std::endl;
+    }
 
-	// Open clock/voltage control sysfs node
-	ctl.exceptions(~std::ios::goodbit);
-	ctl.open(std::filesystem::path(sysfs).append("pp_od_clk_voltage"));
+    // Open clock/voltage control sysfs node
+    auto ctl_path = std::filesystem::path(sysfs) / "pp_od_clk_voltage";
+    ctl.open(ctl_path);
+    if (!ctl.is_open()) {
+        std::cerr << "Warning: cannot open " << ctl_path << std::endl;
+    }
 
 	// Ensure first call to setOpp() always applies settings
 	opp = -1;        
