@@ -33,7 +33,7 @@ jobs:
         name: oberon-governor ${{ github.ref_name }}
         tag_name: ${{ github.ref_name }}
         body: |
-          **oberon-governor** is a CMake-based CPU frequency scaling governor.
+          **oberon-governor** is a CMake-based GPU frequency scaling governor.
 
           This release includes the compiled `oberon-governor` binary for Linux systems.
 
