@@ -16,4 +16,4 @@ Testing is only performed on the ASRock BC-250.
 
 ## Limitations
 
-- Frequency ramp up under load is a bit slow.
+- ~~Frequency ramp up under load is a bit slow.~~
